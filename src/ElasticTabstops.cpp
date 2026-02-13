@@ -192,8 +192,8 @@ extern "C" __declspec(dllexport) void beNotified(SCNotification *notify)
     case NPPN_WORDSTYLESUPDATED:
       NppPlugin::IsSecView();
       if(!elTabs.enabled||!isFileEnabled) return;
-      elTabs.doRecompute=true; elTabs.ComputeView(true);
-      elTabs.doRecompute=false; elTabs.ComputeView(false);
+      elTabs.doRecompute=true; elTabs.ComputeView(minPadding);
+      elTabs.doRecompute=false; elTabs.ComputeView(minPadding);
       return;
     case SCN_FOCUSIN:
       return;
@@ -206,7 +206,7 @@ extern "C" __declspec(dllexport) void beNotified(SCNotification *notify)
       if(!elTabs.enabled || !isFileEnabled) return;
       //if(notify->updated & SC_UPDATE_V_SCROLL||numEdits>0) {}
       elTabs.SwitchToScintilla();
-      elTabs.ComputeView();
+      elTabs.ComputeView(minPadding);
       return;
     }
 		case SCN_MODIFIED:
@@ -226,7 +226,7 @@ extern "C" __declspec(dllexport) void beNotified(SCNotification *notify)
 			if (!elTabs.enabled || !isFileEnabled) return;
 			// Redo the current view since the tab sizes have changed
       elTabs.doRecompute=true;
-      elTabs.ComputeView();
+      elTabs.ComputeView(minPadding);
 			return;
 		}
 		case NPPN_READY:
@@ -278,7 +278,7 @@ extern "C" __declspec(dllexport) void beNotified(SCNotification *notify)
       EnableMenuItem(GetMenu(NppPlugin::nppData._nppHandle), funcItem[IdxConvEt2Spaces]._cmdID, ((isFileEnabled&&elTabs.enabled) ? MF_ENABLED : MF_GRAYED));
       //elTabs.SwitchToScintilla();
       elTabs.doRecompute=true;
-      elTabs.ComputeView();
+      elTabs.ComputeView(minPadding);
       return;
 		}
 #endif

@@ -296,7 +296,7 @@ public:
     std::cout<<"  "<<(idxView ? "SEC":"PRI")<<"["<<std::setw(2)<<fgIdx[idxView]<<"]:"<<cfg;
 #endif
     if(!cfg.enabled) return;
-    cfg.ComputeView();
+    cfg.ComputeView(minPadding);
   }
   void OnFileSaved(SCNotification *notify)
   {
@@ -342,7 +342,7 @@ public:
     SendMessageNPP(NPPM_SETMENUITEMCHECK, cmdID, cfg.enabled=!cfg.enabled);
     EnableMenuItem(GetMenu(NppPlugin::nppData._nppHandle), funcItem[IdxConvEt2Spaces]._cmdID, cfg.enabled ? MF_ENABLED : MF_GRAYED);
     EnableMenuItem(GetMenu(NppPlugin::nppData._nppHandle), funcItem[IdxConvSpaces2Et]._cmdID, cfg.enabled ? MF_ENABLED : MF_GRAYED);
-    if(cfg.enabled) { cfg.isDirty=true; cfg.ComputeView(); }
+    if(cfg.enabled) { cfg.isDirty=true; cfg.ComputeView(minPadding); }
     else cfg.ClearAllTabstops(); // Clear all tabstops on the file
   }
   void OnToggleSelOnly(int cmdID)
@@ -350,14 +350,14 @@ public:
     if(fgView==-1||fgIdx[fgView]==-1) return;
     ETFile& cfg=fileCfg[fgIdx[fgView]];
     SendMessageNPP(NPPM_SETMENUITEMCHECK, cmdID, cfg.selOnly=!cfg.selOnly);
-    if(cfg.enabled) { cfg.isDirty=true; cfg.ComputeView(); }
+    if(cfg.enabled) { cfg.isDirty=true; cfg.ComputeView(minPadding); }
   }
   void OnToggleGlobTabs(int cmdID)
   {
     if(fgView==-1||fgIdx[fgView]==-1) return;
     ETFile& cfg=fileCfg[fgIdx[fgView]];
     SendMessageNPP(NPPM_SETMENUITEMCHECK, cmdID, cfg.globTabs=!cfg.globTabs);
-    if(cfg.enabled) { cfg.isDirty=true; cfg.ComputeView(); }
+    if(cfg.enabled) { cfg.isDirty=true; cfg.ComputeView(minPadding); }
   }
   void OnToggleRemember(int cmdID)
   {
@@ -370,7 +370,7 @@ public:
     if(!cfg.enabled) return;
 // Temporarily disable elastic tabstops because replacing tabs with spaces causes Scintilla to send notifications of all the changes.
     cfg.enabled = false;
-    cfg.ComputeView();
+    cfg.ComputeView(minPadding);
     cfg.ReplaceTabs();
     cfg.enabled = true;
   }
@@ -382,7 +382,7 @@ public:
 // Temporarily disable elastic tabstops because replacing spaces with tabs causes Scintilla to send notifications of all the changes.
     cfg.enabled = false;
     cfg.ReplaceSpaces();
-    cfg.ComputeView();
+    cfg.ComputeView(minPadding);
     cfg.enabled = true;
   }
   void OnEditSettings()
