@@ -291,7 +291,7 @@ public:
     if(idxView==-1||fgIdx[idxView]==-1) return;
     ETFile& cfg=fileCfg[fgIdx[idxView]];
     UpdateMenu(cfg);
-    SendMessageNPP(NPPM_SETMENUITEMCHECK, funcItem[IdxToggleRemember]._cmdID, rememberEnabledFiles);
+    SendMessageNPP(NPPM_SETMENUITEMCHECK, static_cast<int>(funcItem[IdxToggleRemember]._cmdID), rememberEnabledFiles);
 #ifdef USE_CONSOLE
     std::cout<<"  "<<(idxView ? "SEC":"PRI")<<"["<<std::setw(2)<<fgIdx[idxView]<<"]:"<<cfg;
 #endif
@@ -329,8 +329,8 @@ public:
     for(int i=0; i<2; i++)
       if(fgIdx[i]!=-1)
       {
-        if(fgIdx[i]>DWORD(idx)) fgIdx[i]--;
-        else if(fgIdx[i]==DWORD(idx)) fgIdx[i]=-1;
+        if(fgIdx[i]>idx) fgIdx[i]--;
+        else if(fgIdx[i]==idx) fgIdx[i]=-1;
       }
     if(rememberEnabledFiles) fileCfg[idx].WriteToIni(iniFile);
     fileCfg.erase(fileCfg.begin()+idx);
@@ -340,8 +340,8 @@ public:
     if(fgView==-1||fgIdx[fgView]==-1) return;
     ETFile& cfg=fileCfg[fgIdx[fgView]];
     SendMessageNPP(NPPM_SETMENUITEMCHECK, cmdID, cfg.enabled=!cfg.enabled);
-    EnableMenuItem(GetMenu(NppPlugin::nppData._nppHandle), funcItem[IdxConvEt2Spaces]._cmdID, cfg.enabled ? MF_ENABLED : MF_GRAYED);
-    EnableMenuItem(GetMenu(NppPlugin::nppData._nppHandle), funcItem[IdxConvSpaces2Et]._cmdID, cfg.enabled ? MF_ENABLED : MF_GRAYED);
+    EnableMenuItem(GetMenu(NppPlugin::nppData._nppHandle), static_cast<int>(funcItem[IdxConvEt2Spaces]._cmdID), cfg.enabled ? MF_ENABLED : MF_GRAYED);
+    EnableMenuItem(GetMenu(NppPlugin::nppData._nppHandle), static_cast<int>(funcItem[IdxConvSpaces2Et]._cmdID), cfg.enabled ? MF_ENABLED : MF_GRAYED);
     if(cfg.enabled) { cfg.isDirty=true; cfg.ComputeView(minPadding); }
     else cfg.ClearAllTabstops(); // Clear all tabstops on the file
   }
@@ -392,6 +392,7 @@ public:
     SaveIni();
     SendMessageNPP(NPPM_DOOPEN, 0, (LPARAM)iniFilePath);
   }
+
   void ShowHelp()
   {
     HRSRC hRsrc=::FindResource(hModule, MAKEINTRESOURCE(IDR_TEXT1), _T("Text"));
