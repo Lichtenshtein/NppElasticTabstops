@@ -44,7 +44,7 @@ jobs:
             /p:Configuration="${{ matrix.configuration }}" `
             /p:Platform="${{ matrix.platform }}" `
             /p:WindowsTargetPlatformVersion="${{ env.LATEST_SDK }}" `
-            /p:PlatformToolset="v141"
+            /p:PlatformToolset="v143"
 
       - name: Prepare Artifacts
         shell: pwsh
